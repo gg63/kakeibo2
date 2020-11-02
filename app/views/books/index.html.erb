@@ -1,23 +1,37 @@
 <h1>家計簿</h1>
 <%= new_book_path %>
+<!--新規登録画面へのリンクをつけている
+new_bookはroutes.rbで定義した新規画面のURLニックネーム。pathをつける事でURLを返すメソッドになる-->
 <% link_to "+新規", new_book_path, class: "btn btn-success" %>
 <table class="table table-striped">
+    <!--trは表全体-->
     <tr>
+        <!--thはtable headerの略。表内で見出しになるものに使う-->
         <th>年月</th>
         <th>区分</th>
         <th>科目</th>
         <th>金額</th>
         <th>リンク</th>
     </tr>
+    <!--eachでdo～endの中は繰り返し処理を行う
+    配列から1つずつ要素を取りだしbookへ代入している-->
     <% @books.each do |book| %>
     <tr>
+        <!--tdはtable dataの略。データが入っているものに使う-->
+        <!--book.yearは年データをbook.monthは月取り出している-->
         <td><%= book.year %>年<%= book.month %>月</td>
+        <!--inoutは支出、収入の数値データをさす-->
         <td><%= book.inout %></td>
+        <!--categoryは科目種類-->
         <td><%= book.category %></td>
+        <!--amountは金額数値-->
         <td><%= book.amount %>万円</td>
         <td>
+            <!--詳細リンクの追加。btn btn-infoは青いボタンになる-->
             <%= link_to "詳細", book_path(book), class: "btn btn-info" %>
+            <!--編集リンクの追加。btn btn-warningは黄色いボタンになる-->
             <%= link_to "編集", edit_book_path(book), class: "btn btn-warning" %>
+            <!--削除する際確認の画面表示をする-->
             <%= link_to "削除", book_path(book), method: "delete", data: { confirm: '本当に削除しますか？' }, class: "btn btn-danger" %>
         </td>
     </tr>

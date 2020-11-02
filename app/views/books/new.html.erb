@@ -1,9 +1,11 @@
 <h1>家計簿新規登録</h1>
-
+<!--form_withはHTMLのformタグと同じ意味
+@bookをmodelというキーでform_withへ渡している-->
 <%= form_with model: @book, local: true do |f| %>
 
 <div class= "form_group">
     <label>年度</label>
+    <!--f.はinputタグを生成するのも-->
     <%= f.number_field :year, class: "form-control" %>
 </div>
 
