@@ -28,10 +28,15 @@ class BooksController < ApplicationController
         #データをデータベースに保存するための処理
         #ifで@book.saveが成功(true)の時はリダイレクトする
        if  @book.save
+       #flash:リダイレクトをまたいで維持したい情報を管理している。登録/更新成功メッセージをフォームに反映できる
+       #登録成功した場合はnotixeというキーでメッセージを登録している
+        flash[:notice] = "家計簿にデータを1件登録しました"
            #books_path（一覧画面）に移りなさいというリダイレクト命令をブラウザへ返却している
            #リダイレクトを利用することで登録完了したら自動的に一覧画面に戻れる
         redirect_to books_path
       else
+          #登録失敗した場合にはflashへalertというキーでメッセージを登録している
+          flash.now[:alert] = "登録に失敗しました"
           #renderはビューファイルを指示するメソッド
           #登録画面をもう一度表示したい時に登録画面を表示する指示をrenderメソッドを使って出す
         render :new
@@ -47,13 +52,20 @@ class BooksController < ApplicationController
         
         book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
         if @book.update(book_params)
+            flash[:notice] = "データを1件更新しました"
             #更新した家計簿の詳細画面へリダイレクトしている
             redirect_to books_path
         else
+            flash.now[:alert] = "更新に失敗しました"
             #登録に失敗した場合renderメソッドによりedit.html.erbに画面に移る
            render :edit
         end 
-    end 
+    end
     
-    
+    def destroy
+        @book = Book.find(patrams[:id])
+        @book.destroy
+        flash[:notice] = "削除しました"
+        redirect_to books_path
+    end
 end 
