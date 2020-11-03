@@ -56,6 +56,7 @@ class BooksController < ApplicationController
             #更新した家計簿の詳細画面へリダイレクトしている
             redirect_to books_path
         else
+            #リダイレクトせずに現在のリクエストに対する画面だけに表示する時はflash.nowを使う
             flash.now[:alert] = "更新に失敗しました"
             #登録に失敗した場合renderメソッドによりedit.html.erbに画面に移る
            render :edit
