@@ -1,17 +1,25 @@
 #BooksContrololerにApplicationControllerを継承している
 #ApplicationControllerという変数をBooksControllerに渡し定義している
 class BooksController < ApplicationController
+    
+    #before_action:メソッドの実行前に決められたメソッドを実行しておいてくれる機能
+    #befor_actionはコントローラー内のアクションの前に実行するのでonlyでアクションを制限している
+    before_action :set_book, only: [:show, :edit, :update, :destroy]
+    
+    
     #indexアクションを実行するための処理  
     def index
         #全ての家計簿データを@booksというインスタンス変数に値を格納している
         @books = Book.all
+        @books = @books.where(year: params[:year]) if params[:year].present?
+        @books = @books.where(month: params[:month]) if params[:month].present?
     end 
     #showアクションを実行するための処理
     def show
         #コントローラーの中ではparams[:id]で:idに入った値を受け取れる
         #findメソッドでparams[:id]と等しい:idを持つデータを検索している。見つかれば1件のみを取得する
         #単数系の変数@bookへ検索結果を代入する
-        @book = Book.find(params[:id])
+       # @book = Book.find(params[:id])
     end 
     #新規画面登録表示するための処理
     def new
@@ -44,11 +52,11 @@ class BooksController < ApplicationController
     end 
     #editアクションを実行する処理。登録したデータを更新する画面の処理
     def edit 
-        @book = Book.find(params[:id])
+        #@book = Book.find(params[:id])
     end 
     
     def update
-        @book = Book.find(params[:id])
+       # @book = Book.find(params[:id])
         
         book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
         if @book.update(book_params)
@@ -64,9 +72,14 @@ class BooksController < ApplicationController
     end
     
     def destroy
-        @book = Book.find(patrams[:id])
         @book.destroy
         flash[:notice] = "削除しました"
         redirect_to books_path
+    end
+    
+    private #このコントローラーの中でしか使わないという意味
+    
+    def set_book
+        @book = Book.find(params[:id])
     end
 end 
