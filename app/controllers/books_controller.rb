@@ -5,7 +5,7 @@ class BooksController < ApplicationController
     #before_action:メソッドの実行前に決められたメソッドを実行しておいてくれる機能
     #befor_actionはコントローラー内のアクションの前に実行するのでonlyでアクションを制限している
     before_action :set_book, only: [:show, :edit, :update, :destroy]
-    
+    Book.new(book_params)
     
     #indexアクションを実行するための処理  
     def index
@@ -30,7 +30,7 @@ class BooksController < ApplicationController
     
     def create
         #paramsにはたくさんのデータが入っているので登録に必要なデータだけ取り出す処理を行っている
-        book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
+        # book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
         #Bookモデルを新しくインスタンス化し、book_paramsをつけることで新しくデータを入れている
         @book = Book.new(book_params)
         #データをデータベースに保存するための処理
@@ -38,7 +38,7 @@ class BooksController < ApplicationController
        if  @book.save
        #flash:リダイレクトをまたいで維持したい情報を管理している。登録/更新成功メッセージをフォームに反映できる
        #登録成功した場合はnotixeというキーでメッセージを登録している
-        flash[:notice] = "家計簿にデータを1件登録しました"
+        flash[:notice] = "家計簿に2020年7月給料を登録しました"
            #books_path（一覧画面）に移りなさいというリダイレクト命令をブラウザへ返却している
            #リダイレクトを利用することで登録完了したら自動的に一覧画面に戻れる
         redirect_to books_path
@@ -58,11 +58,11 @@ class BooksController < ApplicationController
     def update
        # @book = Book.find(params[:id])
         
-        book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
+        # book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
         if @book.update(book_params)
             flash[:notice] = "データを1件更新しました"
-            #更新した家計簿の詳細画面へリダイレクトしている
-            redirect_to books_path
+            #更新した家計簿の一覧画面へリダイレクトしている
+            redirect_to books_path(@book)
         else
             #リダイレクトせずに現在のリクエストに対する画面だけに表示する時はflash.nowを使う
             flash.now[:alert] = "更新に失敗しました"
@@ -81,5 +81,7 @@ class BooksController < ApplicationController
     
     def set_book
         @book = Book.find(params[:id])
+        book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
+
     end
 end 
