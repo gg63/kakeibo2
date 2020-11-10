@@ -5,7 +5,7 @@ class BooksController < ApplicationController
     #before_action:メソッドの実行前に決められたメソッドを実行しておいてくれる機能
     #befor_actionはコントローラー内のアクションの前に実行するのでonlyでアクションを制限している
     before_action :set_book, only: [:show, :edit, :update, :destroy]
-    Book.new(book_params)
+
     
     #indexアクションを実行するための処理  
     def index
@@ -37,7 +37,7 @@ class BooksController < ApplicationController
         #ifで@book.saveが成功(true)の時はリダイレクトする
        if  @book.save
        #flash:リダイレクトをまたいで維持したい情報を管理している。登録/更新成功メッセージをフォームに反映できる
-       #登録成功した場合はnotixeというキーでメッセージを登録している
+       #登録成功した場合はnoticeというキーでメッセージを登録している
         flash[:notice] = "家計簿に2020年7月給料を登録しました"
            #books_path（一覧画面）に移りなさいというリダイレクト命令をブラウザへ返却している
            #リダイレクトを利用することで登録完了したら自動的に一覧画面に戻れる
@@ -58,7 +58,7 @@ class BooksController < ApplicationController
     def update
        # @book = Book.find(params[:id])
         
-        # book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
+        book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
         if @book.update(book_params)
             flash[:notice] = "データを1件更新しました"
             #更新した家計簿の一覧画面へリダイレクトしている
@@ -81,7 +81,5 @@ class BooksController < ApplicationController
     
     def set_book
         @book = Book.find(params[:id])
-        book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
-
     end
-end 
+end

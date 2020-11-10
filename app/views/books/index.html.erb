@@ -41,7 +41,13 @@ new_bookはroutes.rbで定義した新規画面のURLニックネーム。path�
         <!--book.yearは年データをbook.monthは月取り出している-->
         <td><%= book.year %>年<%= book.month %>月</td>
         <!--inoutは支出、収入の数値データをさす-->
-        <td><%= book.inout %></td>
+        <td>
+        <% if book.inout == 1 %>
+            <%= "収入" %>
+        <% else %>
+            <%= "支出" %>
+        <% end %>
+        </td>
         <!--categoryは科目種類-->
         <td><%= book.category %></td>
         <!--amountは金額数値-->
