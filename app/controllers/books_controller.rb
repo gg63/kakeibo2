@@ -62,7 +62,7 @@ class BooksController < ApplicationController
         book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
         if @book.update(book_params)
             flash[:notice] = "データを1件更新しました"
-            #更新した家計簿の一覧画面へリダイレクトしている
+            #更新した家計簿の詳細画面へリダイレクトしている
             redirect_to @book
         else
             #リダイレクトせずに現在のリクエストに対する画面だけに表示する時はflash.nowを使う
