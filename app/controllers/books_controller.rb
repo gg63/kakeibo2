@@ -10,6 +10,7 @@ class BooksController < ApplicationController
     #indexアクションを実行するための処理  
     def index
         #全ての家計簿データを@booksというインスタンス変数に値を格納している
+        # Bookという単数形はモデルにアクセスする事ができallで全てのデータを取得している
         @books = Book.all
         @books = @books.where(year: params[:year]) if params[:year].present?
         @books = @books.where(month: params[:month]) if params[:month].present?
@@ -41,7 +42,7 @@ class BooksController < ApplicationController
         flash[:notice] = "家計簿に2020年7月給料を登録しました"
            #books_path（一覧画面）に移りなさいというリダイレクト命令をブラウザへ返却している
            #リダイレクトを利用することで登録完了したら自動的に一覧画面に戻れる
-        redirect_to books_path
+        redirect_to books_path(@book)
       else
           #登録失敗した場合にはflashへalertというキーでメッセージを登録している
           flash.now[:alert] = "登録に失敗しました"
@@ -62,7 +63,7 @@ class BooksController < ApplicationController
         if @book.update(book_params)
             flash[:notice] = "データを1件更新しました"
             #更新した家計簿の一覧画面へリダイレクトしている
-            redirect_to books_path(@book)
+            redirect_to @book
         else
             #リダイレクトせずに現在のリクエストに対する画面だけに表示する時はflash.nowを使う
             flash.now[:alert] = "更新に失敗しました"
