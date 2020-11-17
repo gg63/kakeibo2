@@ -5,8 +5,6 @@ class BooksController < ApplicationController
     #before_action:メソッドの実行前に決められたメソッドを実行しておいてくれる機能
     #befor_actionはコントローラー内のアクションの前に実行するのでonlyでアクションを制限している
     before_action :set_book, only: [:show, :edit, :update, :destroy]
-
-    
     #indexアクションを実行するための処理  
     def index
         #全ての家計簿データを@booksというインスタンス変数に値を格納している
@@ -33,7 +31,7 @@ class BooksController < ApplicationController
         #paramsにはたくさんのデータが入っているので登録に必要なデータだけ取り出す処理を行っている
         # book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
         #Bookモデルを新しくインスタンス化し、book_paramsをつけることで新しくデータを入れている
-        book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
+        # book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
         @book = Book.new(book_params)
         #データをデータベースに保存するための処理
         #ifで@book.saveが成功(true)の時はリダイレクトする
@@ -60,7 +58,7 @@ class BooksController < ApplicationController
     def update
        # @book = Book.find(params[:id])
         
-        book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
+        # book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
         if @book.update(book_params)
             flash[:notice] = "データを1件更新しました"
             #更新した家計簿の詳細画面へリダイレクトしている
@@ -83,5 +81,9 @@ class BooksController < ApplicationController
     
     def set_book
         @book = Book.find(params[:id])
+    end
+    
+    def book_params
+        book_params = params.require(:book).permit(:year, :month, :inout, :category, :amount)
     end
 end
